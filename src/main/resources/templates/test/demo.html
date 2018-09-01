@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>test</title>
+	<head th:include="head" />
+</head>
+<body>
+<div class="demo1"> 你好，欢迎进来</div>
+
+<!-- 获取变量用$ 和 * 获取 -->
+<br/>
+<input type="text" name="userName" id="userName"  th:value="${host}" />
+<br/>
+ <span th:text="*{name}">Saturn</span>
+ <br/>
+ 
+ <!-- 字符串拼接 -->
+ <span th:text="*{name+123}">Saturn</span>
+ 
+ <br/>
+ <!-- 对字符传进行转义 -->
+ <div th:text="${html}">
+　　This is an &lt;em&gt;HTML&lt;/em&gt; text. &lt;b&gt;Enjoy yourself!&lt;/b&gt;
+</div> 
+<div th:utext="${html}">
+　　This is an <em>HTML</em> text. <b>Enjoy yourself!</b>
+</div>
+ 
+<br/>
+<!-- 表单 -->
+<form th:action="@{/test/forms}"  method="post" th:method="post">
+    <input type="text"  name="name" th:placeholder="方式发生地方"/>
+    <input type="text" th:value="2" name="age"/>
+    <input type="submit"/>
+</form>
+<br/>
+<!-- 判断后面有哪个class -->
+<span th:if="${num gt 2}" class="demo1">1111</span>
+<span th:if="${num gt 4}" class="demo2">23423432</span>
+<div th:if="${num} > 2">... do something ...</div>
+<!-- 三目 -->
+<!-- <tr th:class="${row.even}? 'even' : 'odd'"></tr> -->
+
+<br/>
+<!-- 因为gender是定义的Enum（枚举）类型，所以要用toString方法 -->
+ <select th:field="${gendar}"  th:switch="${gendar.toString()}" data-required="true">
+              <option value="男" th:case="'男'" th:selected="selected" >男</option>
+              <option value="女" th:case="'女'" th:selected="selected" >女</option>
+              <option value="">请选择</option>
+      </select>
+<br/>
+<!-- * 在switch里面算否则 -->
+<!-- <p th:case="*">User is some other thing</p> -->
+
+<!-- 循环 -->
+<!--  
+th:remove的值如下:
+1.all:删除包含标签和所有的孩子。
+2.body:不包含标记删除,但删除其所有的孩子。
+3.tag:包含标记的删除,但不删除它的孩子。
+4.all-but-first:删除所有包含标签的孩子,除了第一个。
+5.none:什么也不做。这个值是有用的动态评估。
+-->
+<table border="1" style="width: 100%;">
+	<tbody th:remove="all-but-first">
+                <tr th:each="var:${dealerList}">
+　　　　　　 <td th:text="${varStat.count}"></td> <!-- 索引 -->
+                    <td th:text="${var.ORG_NAME}"></td>
+                    <td th:text="${var.LATITUDE}"></td>
+                    <!-- <td  th:text="${var.LATITUDE == null?'0':#numbers.formatDecimal(var.LATITUDE,0,2)}"></td> -->
+                    <td  th:unless="${#lists.isEmpty(var.LATITUDE)}">
+                    	<span th:text="${#numbers.formatDecimal(var.LATITUDE,0,2)}"></span>
+                    </td>
+                    <td  th:if="${#lists.isEmpty(var.LATITUDE)}"></td>
+                   	<!-- 格式化数字，保留两位小数 -->
+                    <td th:text="${var.CREATE_DATE}"></td>
+		            <td th:text="${#dates.format(var.CREATE_DATE,'yyyy-MM-dd')}"></td> <!-- 格式化日期 -->
+		        </tr>
+	</tbody>
+</table> 
+<!-- 
+${#calendars.format(cal, 'dd/MMM/yyyy HH:mm')}
+${#calendars.day(date)}  
+${#calendars.month(date)}
+${#dates.format(date, 'dd/MMM/yyyy HH:mm')}
+${#dates.hour(date)}                  
+${#dates.minute(date)}            
+${#dates.second(date)}  
+${#dates.millisecond(date)} 
+-->
+
+<!-- 国际化 -->
+<br/>
+<p><label th:text="#{title}"></label></p>
+<a th:href="@{/test/demo?lang=en_US}">English(US)</a>&nbsp;&nbsp;
+<a th:href="@{/test/demo?lang=zh_CN}">简体中文</a>
+<br/>
+
+<br/> 
+<!-- 引入模板，两种方式引入 -->
+<div th:include="foot :: #copy-section"></div>
+<div th:include="foot :: copy"></div>
+</body>
+<script type="text/javascript">
+ var userName = $("#userName").val();
+</script>
+</html>
