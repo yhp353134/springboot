@@ -1,24 +1,26 @@
 package com.yu.boot.controller;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.yu.boot.model.Student;
+import com.yu.boot.service.RedisService;
+import com.yu.boot.service.TestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yu.boot.model.Student;
-import com.yu.boot.service.RedisService;
-import com.yu.boot.service.TestService;
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/test/")
@@ -36,7 +38,39 @@ public class TestController {
     //国际化
     @Autowired
     private MessageSource messageSource;
-    
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @RequestMapping("sendEmail")
+	@ResponseBody
+    public String  sendEmail() throws MessagingException {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("yhp_develop_test@163.com");
+        message.setTo("yhp353134@163.com");
+        message.setSubject("主题：简单邮件");
+        message.setText("测试邮件内容");
+        message.setCc(new String[]{"yuhp@belink.com", "892002463@qq.com"});
+        message.setSentDate(new Date());
+        mailSender.send(message);
+        return message.toString();
+
+		/*MimeMessage mimeMessage = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+		helper.setFrom("yhp_develop_test@163.com");
+		helper.setTo("yhp353134@163.com");
+		helper.setSubject("主题：简单邮件");
+		helper.setText("测试邮件内容");  // 里面是可以放html代码的
+		*//*
+		FileSystemResource file = new FileSystemResource(new File("weixin.jpg"));
+		FileSystemResource file2 = new FileSystemResource(new File("2.jpg"));
+		helper.addAttachment("附件-1.jpg", file);
+		helper.addAttachment("附件-2.jpg", file2);
+		*//*
+		mailSender.send(mimeMessage);
+		return helper.toString();*/
+	}
+
     @RequestMapping("list")
     @ResponseBody
     public List<Student> getStus() {

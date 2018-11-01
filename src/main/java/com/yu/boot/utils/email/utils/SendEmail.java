@@ -1,11 +1,11 @@
 package com.yu.boot.utils.email.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fbank.connect.email.utils.common.EmailUtils;
-import com.fbank.connect.email.utils.common.Mail;
-import com.fbank.connect.email.utils.java.SendMail;
-import com.fbank.fast.core.util.jretty.StringUtils;
-import org.apache.commons.collections.MapUtils;
+import com.yu.boot.utils.email.commonEmail.EmailUtils;
+import com.yu.boot.utils.email.commonEmail.Mail;
+import com.yu.boot.utils.email.utils.java.SendMail;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

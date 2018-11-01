@@ -37,10 +37,14 @@ public class MyBatisConfig {
     @Bean
     public DataSource getDataSource() throws Exception {
         Properties props = new Properties();
-        props.put("driverClassName", env.getProperty("spring.datasource.driver-class-name"));
+       /* props.put("driverClassName", env.getProperty("spring.datasource.driver.class.name"));
         props.put("url", env.getProperty("spring.datasource.url"));
         props.put("username", env.getProperty("spring.datasource.username"));
-        props.put("password", env.getProperty("spring.datasource.password"));
+        props.put("password", env.getProperty("spring.datasource.password"));*/
+        props.put("driverClassName", "com.mysql.jdbc.Driver");
+        props.put("url", "jdbc:mysql://127.0.0.1:3306/inte?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false");
+        props.put("username", "root");
+        props.put("password", "123456");
         return DruidDataSourceFactory.createDataSource(props);
     }
 
@@ -52,9 +56,12 @@ public class MyBatisConfig {
         SqlSessionFactoryBean fb = new SqlSessionFactoryBean();
         fb.setDataSource(ds);//指定数据源(这个必须有，否则报错)
         //下边两句仅仅用于*.xml文件，如果整个持久层操作不需要使用到xml文件的话（只用注解就可以搞定），则不加
-        fb.setTypeAliasesPackage(env.getProperty("mybatis.typeAliasesPackage"));//指定基包
+       /* fb.setTypeAliasesPackage(env.getProperty("mybatis.typeAliasesPackage"));//指定基包
         fb.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(env
-                .getProperty("mybatis.mapperLocations")));//指定xml文件位置
+                .getProperty("mybatis.mapperLocations")));//指定xml文件位置*/
+
+        fb.setTypeAliasesPackage("com.yu.boot.model");//指定基包
+        fb.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));//指定xml文件位置
         return fb.getObject();
     }
 
