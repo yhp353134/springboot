@@ -151,6 +151,7 @@
           <artifactId>commons-email</artifactId>
           <version>1.5</version>
       </dependency>
+      <!--模板引擎-->
       <dependency>
           <groupId>org.apache.velocity</groupId>
           <artifactId>velocity</artifactId>
